@@ -1,6 +1,6 @@
 # Arch Linux - Post Installation Packages
 
-Installation of several needed packages and system tweaks like LAMP, NPM and Fonts etc. for Arch Linux
+Installation of several needed packages like LAMP, NPM, Git, Composer, Docker etc. for Arch Linux
 
 ## Usage
 
