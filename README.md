@@ -1,6 +1,6 @@
-# Garuda Linux - Post Installation Packages
+# Arch Linux - Post Installation Packages
 
-Installation of several needed packages and system tweaks like LAMP, NPM and Fonts etc. for Garuda Linux
+Installation of several needed packages and system tweaks like LAMP, NPM and Fonts etc. for Arch Linux
 
 ## Usage
 
