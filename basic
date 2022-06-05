@@ -42,6 +42,9 @@ sudo pacman -S mariadb
 sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 sudo systemctl enable --now mariadb
 sudo mysql_secure_installation
+echo "Creating new user \"admin\" with all privileges, please type the password that you set for root user (leave empty if root password is empty)"
+read -sp password
+sudo mysql --user=root --password=$password -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';"
 
 # PHPMyAdmin
 sudo pacman -S phpmyadmin
