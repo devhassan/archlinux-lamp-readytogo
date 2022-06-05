@@ -1,0 +1,122 @@
+#!/bin/bash
+set -e
+
+sudo pacman -Syu
+
+# General
+sudo pacman -S npm expect dropbox vlc composer  openssh kolourpaint filezilla opera gimp git gnupg
+
+# Apache
+sudo pacman -S apache
+sudo systemctl start httpd.service
+sudo systemctl enable httpd.service
+
+# PHP
+sudo pacman -S php php-apache
+
+if [ ! -f /etc/httpd/conf/httpd.conf.default ]; then
+    cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.default
+fi
+
+sed -i "s/LoadModule mpm_event_module modules\/mod_mpm_event.so/LoadModule mpm_prefork_module modules\/mod_mpm_prefork.so/g" /etc/httpd/conf/httpd.conf
+sed -i "172s|AllowOverride None|AllowOverride All|g" /etc/httpd/conf/httpd.conf
+echo "LoadModule php_module modules/libphp.so" >> /etc/httpd/conf/httpd.conf
+echo "AddHandler php-script .php" >> /etc/httpd/conf/httpd.conf
+echo "Include conf/extra/php_module.conf" >> /etc/httpd/conf/httpd.conf
+echo "Include conf/extra/phpmyadmin.conf" >> /etc/httpd/conf/httpd.conf
+
+PHP_VERSION=$(php -v | head -n 1 | cut -d " " -f 2 | cut -f1-2 -d".")
+if [ ! -f /etc/php/php.ini.default ]; then
+    cp /etc/php/php.ini /etc/php/php.ini.default
+fi
+sed -i "s/display_errors = Off/display_errors = On/g" /etc/php/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 8000M/g" /etc/php/php.ini
+sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 8000M/g" /etc/php/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 8000M/g" /etc/php/php.ini
+sed -i "s/post_max_size = 8M/post_max_size = 8000M/g" /etc/php/php.ini
+
+sudo systemctl restart httpd.service
+
+# MySQL
+sudo pacman -S mariadb
+sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+sudo systemctl enable --now mariadb
+sudo mysql_secure_installation
+
+# PHPMyAdmin
+sudo pacman -S phpmyadmin
+sudo mkdir -p /var/lib/phpmyadmin/tmp
+sudo chown -R http:http /var/lib/phpmyadmin/tmp
+sudo mkdir /etc/phpmyadmin
+sudo cp /usr/share/webapps/phpMyAdmin/config.sample.inc.php /usr/share/webapps/phpMyAdmin/config.inc.php
+echo "\$cfg['SendErrorReports'] = 'never';" >> /usr/share/webapps/phpMyAdmin/config.inc.php
+echo "\$cfg['MaxNavigationItems'] = '500';" >> /usr/share/webapps/phpMyAdmin/config.inc.php
+echo "\$cfg['TempDir'] = '/var/lib/phpmyadmin/tmp';" >> /usr/share/webapps/phpMyAdmin/config.inc.php
+echo "\$cfg['blowfish_secret'] = 'Nj9pzHbF^ZGgVxgZ!4cc-%*x4<QDfVTW';" >> /usr/share/webapps/phpMyAdmin/config.inc.php
+sudo touch /etc/httpd/conf/extra/phpmyadmin.conf
+echo "Alias /phpmyadmin "/usr/share/webapps/phpMyAdmin"
+<Directory "/usr/share/webapps/phpMyAdmin">
+    DirectoryIndex index.php
+    AllowOverride All
+    Options FollowSymlinks
+    Require all granted
+</Directory>" >> /etc/httpd/conf/extra/phpmyadmin.conf
+
+
+chown $USER:$USER -R /srv/http
+sudo systemctl restart httpd
+
+echo
+read -p "Install Code Editor? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    echo
+    read -p "Press 1 for Visual Studio Code or Press 2 for Sublime Editor" -n 1 -r
+    echo
+    if [[ $REPLY == 1 ]]
+    then
+        sudo pacman -S code
+        echo
+        read -p "Install VS Code Extensions for PHP? " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            code --install-extension bmewburn.vscode-intelephense-client
+            code --install-extension junstyle.php-cs-fixer
+            code --install-extension eamodio.gitlens
+            code --install-extension esbenp.prettier-vscode
+
+            wget https://download1493.mediafire.com/acht4uqgvcrg/vvp3f224hijjwjh/aspirantzhang.php-enhanced-snippets-2.19.0.vsix
+            code --install-extension aspirantzhang.php-enhanced-snippets-2.19.0.vsix
+        fi
+    else
+        sudo pacman -S sublime-text
+    fi
+fi
+
+echo "PHP $PHP_VERISON, Apache, MySQL, PHPMyAdmin have been installed."
+
+echo
+read -p "Install Python, NodeJS and Yarn? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # Python
+    sudo pacman -S python-pip
+    alias python='python3'
+    alias pip='pip3'
+    pip install requests yfinance pandas streamlit
+
+    # NodeJS
+    sudo pacman -S curl
+    sudo pacman -S nodejs
+    sudo pacman -S npm
+
+    # Yarn
+    sudo pacman -S yarn
+fi
+
+
+read -p "All Done. Hit anything on <enter> key to exit. " X
+exit 0
