@@ -1,4 +1,4 @@
-# Arch Linux - Post Installation Packages
+# Arch Linux - Post Installation Packages ( NOTE: This is BASH script NOT FISH! )
 
 Installation of several needed packages like LAMP, NPM, Git, Composer, Docker etc. for Arch Linux
 
