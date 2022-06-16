@@ -64,7 +64,7 @@ echo "Alias /phpmyadmin "/usr/share/webapps/phpMyAdmin"
     Options FollowSymlinks
     Require all granted
 </Directory>" >> /etc/httpd/conf/extra/phpmyadmin.conf
-
+sed -i "s/;extension=mysqli/extension=mysqli/g" /etc/php/php.ini
 
 chown $USER:$USER -R /srv/http
 sudo systemctl restart httpd
@@ -89,9 +89,6 @@ then
             code --install-extension junstyle.php-cs-fixer
             code --install-extension eamodio.gitlens
             code --install-extension esbenp.prettier-vscode
-
-            wget https://download1493.mediafire.com/acht4uqgvcrg/vvp3f224hijjwjh/aspirantzhang.php-enhanced-snippets-2.19.0.vsix
-            code --install-extension aspirantzhang.php-enhanced-snippets-2.19.0.vsix
         fi
     else
         sudo pacman -S sublime-text
