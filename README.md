@@ -11,6 +11,7 @@ Run `./install` and follow along.
 Installs and configures following:
 
 - LAMP Stack
+- phpMyAdmin ( New user will be created, user it to access phpMyAdmin. User: admin, Pass: admin )
 - Visual Studio Code or Sublime ( User selects )
 - If Visual Studio Code installed, installs PHP related extensions
 - Python, Pip ( User selects )
