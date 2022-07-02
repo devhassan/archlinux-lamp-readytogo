@@ -19,7 +19,7 @@ Installs and configures following:
 - Git
 - Others
   - VLC
-  - Dropbox
+  - OpenSSL
   - Kolourpaint
   - Opera (I personally love Opera, I consider it better than Chrome)
   - etc..
