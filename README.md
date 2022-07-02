@@ -1,4 +1,4 @@
-# Arch Linux ( will work for Manjaro and Garuda Linux, or any other distro based of Arch Linux )- Post Installation Packages ( NOTE: This is BASH script NOT FISH! )
+# Arch Linux ( will work for Manjaro and Garuda Linux, or any other distro based of Arch Linux )- Post Installation Packages ( NOTE: This is BASH script NOT ZSH or FISH! )
 
 Installation of several needed packages like LAMP, NPM, Git, Composer, etc. for Arch Linux ( or Arch Linux based distros like Manjaro/Garuda Linux etc. )
 
