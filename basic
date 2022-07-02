@@ -4,7 +4,7 @@ set -e
 sudo pacman -Syu
 
 # General
-sudo pacman -S npm expect dropbox vlc composer  openssh kolourpaint filezilla opera gimp git gnupg
+sudo pacman -S npm expect vlc composer openssh kolourpaint filezilla opera gimp git gnupg
 
 # Apache
 sudo pacman -S apache
@@ -43,7 +43,8 @@ sudo mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 sudo systemctl enable --now mariadb
 sudo mysql_secure_installation
 echo "Creating new user \"admin\" with all privileges, please type the password that you set for root user (leave empty if root password is empty)"
-read -sp password
+echo "MySQL root password: "
+read -s password
 sudo mysql --user=root --password=$password -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';"
 
 # PHPMyAdmin
@@ -70,7 +71,7 @@ chown $USER:$USER -R /srv/http
 sudo systemctl restart httpd
 
 echo
-read -p "Install Code Editor? " -n 1 -r
+read -p "Install Code Editor? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -81,7 +82,7 @@ then
     then
         sudo pacman -S code
         echo
-        read -p "Install VS Code Extensions for PHP? " -n 1 -r
+        read -p "Install VS Code Extensions for PHP? [y/N] " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]
         then
@@ -98,7 +99,7 @@ fi
 echo "PHP $PHP_VERISON, Apache, MySQL, PHPMyAdmin have been installed."
 
 echo
-read -p "Install Python, NodeJS and Yarn? " -n 1 -r
+read -p "Install Python, NodeJS and Yarn? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
